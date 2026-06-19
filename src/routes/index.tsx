@@ -1,29 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Portfolio } from "@/components/Portfolio";
+import { BootLoader } from "@/components/BootLoader";
+import { CursorTrail } from "@/components/CursorTrail";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Shubhansh Patel — Kernel-Space Dreamer · Linux & Systems Portfolio" },
+      { name: "description", content: "Portfolio of Shubhansh Patel — Linux power user, kernel tinkerer, and CSE student building low-level tools, device bridges, and autonomous AI agents." },
+      { property: "og:title", content: "Shubhansh Patel — Portfolio" },
+      { property: "og:description", content: "Linux · Kernel · Rust · C · Android NDK · Agentic AI." },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const [booted, setBooted] = useState(false);
+
+  useEffect(() => {
+    // Default to dark theme on first visit
+    if (!localStorage.getItem("theme")) {
+      document.documentElement.classList.add("dark");
+    } else if (localStorage.getItem("theme") === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      {!booted && <BootLoader onDone={() => setBooted(true)} />}
+      {booted && <CursorTrail />}
+      <Portfolio />
+    </>
   );
 }
